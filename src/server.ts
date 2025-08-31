@@ -6,6 +6,8 @@ import {
 } from 'fastify-type-provider-zod'
 import { fastifyCors } from '@fastify/cors'
 import { env } from './env.ts'
+import { getClientsRoute } from './routes/clients/get-clients.ts'
+import { createUsersRoute } from './routes/users/create-user.ts'
 
 const app = fastify().withTypeProvider<ZodTypeProvider>()
 
@@ -16,11 +18,16 @@ app.register(fastifyCors, {
 app.setSerializerCompiler(serializerCompiler)
 app.setValidatorCompiler(validatorCompiler)
 
-
 // Health
 app.get('/health', () => {
-    return "live"
+  return 'live'
 })
+
+// GET
+app.register(getClientsRoute)
+
+// POST
+app.register(createUsersRoute)
 
 app
   .listen({
